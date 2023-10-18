@@ -18,4 +18,4 @@ export type FilterType = {
   column: string,
   comparison: string,
   value: string,
-}
+};
