@@ -10,6 +10,7 @@ function Table() {
   const [selectedColumn, setSelectedColumn] = useState('population');
   const [selectedComparison, setSelectedComparison] = useState('maior que');
   const [selectedValue, setSelectedValue] = useState('0');
+  const [avaiableColumn, setAvaiableColumn] = useState<string[]>([]);
 
   useEffect(() => {
     setFilteredPlanetArray(data);
@@ -35,7 +36,17 @@ function Table() {
       }
     });
     setFilteredPlanetArray(filteredPlanets2);
+
+    setAvaiableColumn([...avaiableColumn, selectedColumn]);
   };
+
+  const dropdownArr = [
+    'population', 'orbital_period', 'diameter', 'rotation_period', 'surface_water',
+  ];
+
+  const availableColumns = dropdownArr.filter(
+    (column) => !avaiableColumn.includes(column),
+  );
 
   const filteredPlanets = filteredPlanetArray
     .filter((planet: any) => planet.name.toLowerCase().includes(inputValue));
@@ -55,11 +66,11 @@ function Table() {
         value={ selectedColumn }
         onChange={ (e) => setSelectedColumn(e.target.value) }
       >
-        <option value="population">population</option>
-        <option value="orbital_period">orbital_period</option>
-        <option value="diameter">diameter</option>
-        <option value="rotation_period">rotation_period</option>
-        <option value="surface_water">surface_water</option>
+        {availableColumns.map((column) => (
+          <option key={ column } value={ column }>
+            {column}
+          </option>
+        ))}
       </select>
       <select
         data-testid="comparison-filter"
