@@ -13,3 +13,9 @@ export type ResultType = {
   edited: string,
   url: string,
 };
+
+export type FilterType = {
+  column: string,
+  comparison: string,
+  value: string,
+}
