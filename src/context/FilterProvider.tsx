@@ -1,23 +1,18 @@
-import { createContext, useContext, useReducer } from 'react';
-
-type FilterAction = string;
-type FilterState = string | undefined;
-
-const FilterContext = createContext<{
-  filter: FilterState;
-  dispatch: React.Dispatch<FilterAction>;
-} | any>(undefined);
-
-export function useFilter() {
-  const context = useContext(FilterContext);
-  return context;
-}
+import { useEffect, useState } from 'react';
+import FilterContext from './ProviderContext';
+import fetchApi from '../services/API';
 
 export function FilterProvider({ children }: { children: React.ReactNode }) {
-  const [filter, dispatch] = useReducer((s: FilterState, act: FilterAction) => act, '');
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetchApi().then((filteredData: any) => {
+      setData(filteredData);
+    });
+  }, []);
 
   return (
-    <FilterContext.Provider value={ { filter, dispatch } }>
+    <FilterContext.Provider value={ { data, setData } }>
       {children}
     </FilterContext.Provider>
   );

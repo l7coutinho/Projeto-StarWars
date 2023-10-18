@@ -1,9 +1,13 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
 import App from '../App';
+import { FilterProvider } from '../context/FilterProvider';
 
 test('I am your test', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/Hello, App!/i);
+  render(
+    <FilterProvider>
+      <App />
+    </FilterProvider>
+    );
+  const linkElement = screen.getByRole('button');
   expect(linkElement).toBeInTheDocument();
 });
