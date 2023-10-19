@@ -48,7 +48,7 @@ function Table() {
       }
     });
     setFilteredPlanetArray(filteredPlanets2);
-    setSelectedColumn(updatedAvailableColumns[0])
+    setSelectedColumn(updatedAvailableColumns[0]);
   };
 
   const removeFilter = (index: number) => {
