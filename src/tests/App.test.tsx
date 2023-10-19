@@ -37,8 +37,7 @@ describe('<Table />', () => {
         <App />
       </FilterProvider>
     );
-    
-    
+
     const columnSelect = getByTestId('column-filter');
     await userEvent.selectOptions(columnSelect, 'population');
     expect(columnSelect).toHaveValue('population');

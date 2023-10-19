@@ -48,14 +48,13 @@ function Table() {
       }
     });
     setFilteredPlanetArray(filteredPlanets2);
+    setSelectedColumn(updatedAvailableColumns[0])
   };
 
   const removeFilter = (index: number) => {
     const removedFilter = filters[0];
     const updatedAvailableColumns = [...availableColumns, removedFilter.column];
     setAvailableColumns(updatedAvailableColumns);
-
-    console.log(updatedAvailableColumns);
 
     const updatedFilters = filters.filter((e, i) => i !== index);
     setFilters(updatedFilters);
