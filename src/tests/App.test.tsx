@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import {userEvent} from '@testing-library/user-event';
 import App from '../App';
 import { FilterProvider } from '../context/FilterProvider';
@@ -52,5 +52,35 @@ describe('<Table />', () => {
     const filterButton = getByTestId('button-filter');
     await userEvent.click(filterButton);
     expect(screen.getByRole('button', {name: /x/i})).toBeInTheDocument;
+  });
+
+  it('Deve remover os filtros corretamente', async () => {
+    const { getByTestId } = render(
+      <FilterProvider>
+        <App />
+      </FilterProvider>
+    );
+
+    const columnSelect = getByTestId('column-filter');
+    await userEvent.selectOptions(columnSelect, 'diameter');
+    expect(columnSelect).toHaveValue('diameter');
+    
+    const comparisonSelect = getByTestId('comparison-filter');
+    await userEvent.selectOptions(comparisonSelect, 'menor que');
+    expect(comparisonSelect).toHaveValue('menor que')
+    
+    const valueInput = getByTestId('value-filter');
+    await userEvent.type(valueInput, '155000');
+
+    const filterButton = getByTestId('button-filter');
+    await userEvent.click(filterButton);
+
+    const removeFilterButton = screen.getByRole('button', { name: /x/i });
+    userEvent.click(removeFilterButton);
+
+    await waitFor(() => {
+      const removedFilter = screen.queryByRole('button', { name: /x/i });
+      expect(removedFilter).toBeNull();
+    });
   });
 });
