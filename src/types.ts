@@ -1,4 +1,5 @@
 export type ResultType = {
+  [key: string]: string,
   name: string,
   rotation_period: string,
   orbital_period: string,

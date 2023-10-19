@@ -16,11 +16,21 @@ function PlanetTable({ data }: any) {
       </thead>
 
       <tbody>
-        {data.map((element: any, index: number) => (
-          <tr key={ index }>
-            {headers.map((header) => (
-              <td key={ header }>{element[header]}</td>
-            ))}
+        {data.map((element: any, key: number) => (
+          <tr key={ key }>
+            {headers.map((header, index) => {
+              if (index === 0) {
+                return (
+                  <td
+                    key={ header }
+                    data-testid="planet-name"
+                  >
+                    {element[header]}
+                  </td>
+                );
+              }
+              return (<td key={ header }>{element[header]}</td>);
+            })}
           </tr>
         ))}
       </tbody>

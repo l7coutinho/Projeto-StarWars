@@ -14,6 +14,7 @@ function Table() {
     'population', 'orbital_period', 'diameter', 'rotation_period', 'surface_water',
   ]);
   const [filters, setFilters] = useState<FilterType[]>([]);
+  const [sortConfig, setSortConfig] = useState({ column: 'population', sort: 'ASC' });
 
   useEffect(() => {
     setFilteredPlanetArray(data);
@@ -90,6 +91,34 @@ function Table() {
   const filteredPlanets = filteredPlanetArray
     .filter((planet: any) => planet.name.toLowerCase().includes(inputValue));
 
+  const handleSort = () => {
+    const { column } = sortConfig;
+
+    const planetUnknown = filteredPlanets.filter((element) => {
+      return element[column] === 'unknown';
+    });
+
+    const planetKnown = filteredPlanets.filter((element) => {
+      return element[column] !== 'unknown';
+    });
+
+    const sortedPlanets = [...planetKnown];
+
+    sortedPlanets.sort((a, b) => {
+      const sortOrder = sortConfig.sort === 'ASC' ? 1 : -1;
+
+      if (Number(a[column]) < Number(b[column])) {
+        return -sortOrder;
+      }
+      if (Number(a[column]) > Number(b[column])) {
+        return sortOrder;
+      }
+      return 0;
+    });
+
+    setFilteredPlanetArray([...sortedPlanets, ...planetUnknown]);
+  };
+
   return (
     <div>
       <div>
@@ -135,6 +164,50 @@ function Table() {
 
       <PlanetTable data={ filteredPlanets } />
 
+      <div>
+        <select
+          data-testid="column-sort"
+          value={ sortConfig.column }
+          onChange={ (e) => setSortConfig({ ...sortConfig, column: e.target.value }) }
+        >
+          {availableColumns.map((column) => (
+            <option key={ column } value={ column }>
+              {column}
+            </option>
+          ))}
+        </select>
+
+        <label>
+          <input
+            type="radio"
+            data-testid="column-sort-input-asc"
+            name="sort-direction"
+            value="ASC"
+            checked={ sortConfig.sort === 'ASC' }
+            onChange={ () => setSortConfig({ ...sortConfig, sort: 'ASC' }) }
+          />
+          Ascendente
+        </label>
+        <label>
+          <input
+            type="radio"
+            data-testid="column-sort-input-desc"
+            name="sort-direction"
+            value="DESC"
+            checked={ sortConfig.sort === 'DESC' }
+            onChange={ () => setSortConfig({ ...sortConfig, sort: 'DESC' }) }
+          />
+          Descendente
+        </label>
+
+        <button
+          data-testid="column-sort-button"
+          onClick={ () => handleSort() }
+        >
+          Ordenar
+        </button>
+
+      </div>
       <div>
         {filters.map((filter, index) => (
           <div key={ index } data-testid="filter">
